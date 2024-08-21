@@ -23,7 +23,9 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": ["CAMERA"]
+      "permissions": [
+        "CAMERA"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -33,6 +35,12 @@
         "projectId": "1deb797f-b52a-4f52-9cd7-7d05c4ac54cb"
       }
     },
-    "owner": "emipignata"
+    "owner": "emipignata",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/1deb797f-b52a-4f52-9cd7-7d05c4ac54cb"
+    }
   }
 }

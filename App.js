@@ -1,45 +1,39 @@
 import React, { useState } from 'react';
-import { View, Button, Image, Text, StyleSheet, Alert } from 'react-native';
+import { View, Button, Text, Image, StyleSheet, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
 export default function App() {
   const [imageUri, setImageUri] = useState(null);
 
-  const takePhoto = async () => {
+  const pickImage = async () => {
+    // Solicitar permisos para la cámara
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== 'granted') {
-      alert('Sorry, we need camera permissions to make this work!');
+      Alert.alert('Permiso de cámara requerido', 'Se requiere permiso para acceder a la cámara');
       return;
     }
 
-    let result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    // Tomar foto
+    const result = await ImagePicker.launchCameraAsync({
       allowsEditing: false,
+      aspect: [4, 3],
       quality: 1,
     });
 
-    console.log('Image Picker Result:', result); // Debug line
-
     if (!result.canceled) {
-      console.log('Image URI:', result.uri); // Debug line
-      setImageUri(result.uri);
-      Alert.alert(
-        'Photo Captured',
-        `Photo URI: ${result.uri}`,
-        [{ text: 'OK', onPress: () => console.log('Photo URI:', result.uri) }],
-        { cancelable: false }
-      );
-    } else {
-      alert('Photo capture canceled.');
+      const uri = result.assets[0].uri;
+      setImageUri(uri);
+      Alert.alert('Foto capturada', `URL de la imagen: ${uri}`);
     }
   };
 
   return (
     <View style={styles.container}>
-      <Button title="Take a Photo" onPress={takePhoto} />
+      <Button title="Tomar Foto" onPress={pickImage} />
       {imageUri && (
         <View style={styles.imageContainer}>
           <Image source={{ uri: imageUri }} style={styles.image} />
+          <Text style={styles.text}>Guille, esto fue muy fácil</Text>
         </View>
       )}
     </View>
@@ -51,18 +45,25 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#fff',
   },
   imageContainer: {
     marginTop: 20,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: 'gray',
+    width: 300,
+    height: 300,
+    borderColor: 'red',
+    borderWidth: 2,
+    justifyContent: 'center',
     alignItems: 'center',
   },
   image: {
-    width: 300,
-    height: 300,
-    borderWidth: 2,
-    borderColor: 'red',
+    width: '100%',
+    height: '100%',
+  },
+  text: {
+    position: 'absolute',
+    color: 'red',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
